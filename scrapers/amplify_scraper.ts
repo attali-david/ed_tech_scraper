@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer');
+import puppeteer = require('./puppeteer');
 
-export default async function getAmplifyJobs(search: string) {
+async function getAmplifyJobs(search: string) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto('https://amplify.wd1.myworkdayjobs.com/Amplify_Careers');
@@ -20,14 +20,15 @@ export default async function getAmplifyJobs(search: string) {
   const jobs = await page.evaluate((resultsSelector) => {
     return [...document.querySelectorAll(resultsSelector)]
       .map((anchor) => {
-        if (anchor.textContent.trim().toLowerCase().includes(`${search}`)) {
-          const title = anchor.textContent.trim();
-          return { title, url: anchor.href };
-        }
-        return;
+        const title = anchor.textContent.trim();
+        return { title, url: anchor.href };
       })
       .filter((el) => el);
   }, resultsSelector);
 
+  console.log(jobs);
+
   await browser.close();
 }
+
+getAmplifyJobs('engineer');

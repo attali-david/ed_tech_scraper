@@ -14,11 +14,8 @@ async function getNewselaJobs(search) {
   const jobs = await page.evaluate((resultsSelector) => {
     return [...document.querySelectorAll(resultsSelector)]
       .map((anchor) => {
-        if (anchor.textContent.trim().toLowerCase()) {
-          const title = anchor.textContent.trim();
-          return { title, url: anchor.href };
-        }
-        return;
+        const title = anchor.textContent.trim();
+        return { title, url: anchor.href };
       })
       .filter((el) => el);
   }, resultsSelector);
